@@ -10,7 +10,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_registerMenuCommand
-// @version     1.0.0
+// @version     1.0.1
 // @updateURL   https://github.com/ryu39/nicorepo-filter/raw/master/nicorepo-filter.user.js
 // ==/UserScript==
 
@@ -131,6 +131,14 @@ GM_config.init(
       'label': '生放送',
       'type': 'checkbox',
       'default': true
+    },
+    // その他
+    'log-reslist':
+    {
+      'label': 'ニコレポコメント',
+      'section': ['全般'],
+      'type': 'checkbox',
+      'default': true
     }
   }
 });
@@ -169,7 +177,7 @@ var execute_function = function($){
   // 最後に読み込んだニコレポの一覧で、フィルターにヒットする記事を非表示にする。
   function hide_denied_elements() {
     $.each(deny_elem_selectors, function (i, selector) {
-      $('div.nicorepo-page div.timeline').last().children(selector).each(function (j, elem) {
+      $('div.nicorepo-page > div.timeline').last().find(selector).each(function (j, elem) {
         $(elem).hide();
       }
       );
