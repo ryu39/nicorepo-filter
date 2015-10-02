@@ -184,16 +184,25 @@ var execute_function = function($){
       );
     });
   }
+  // 先頭に表示されている記事の上にある水平線を消す
+  function remove_head_line_from_first_elem() {
+    var first_elem = $('div.nicorepo-page > div.timeline').last().find(':visible');
+    if (first_elem.length > 0) {
+      first_elem.first().addClass('first');
+    }
+  }
   // 「過去のニコレポを見る」リンク押下時にユーザースクリプトを再実行させる。
   function add_event_to_next_page_link() {
     $('div.next-page').not('.loading').on('destroyed', function () {
       hide_denied_elements();
+      remove_head_line_from_first_elem();
       add_event_to_next_page_link();
     });
   }
 
   // 初回のページ表示時に1回だけ実行。以降は、「過去のニコレポを見る」リンク押下時に再実行させる。
   hide_denied_elements();
+  remove_head_line_from_first_elem();
   add_event_to_next_page_link();
 };
 var script = document.createElement('script');
