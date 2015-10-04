@@ -133,6 +133,12 @@ GM_config.init(
       'type': 'checkbox',
       'default': true
     },
+    'log-community-action-level':
+    {
+      'label': 'コミュニティレベル',
+      'type': 'checkbox',
+      'default': true
+    },
     // その他
     'log-reslist':
     {
