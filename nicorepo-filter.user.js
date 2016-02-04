@@ -161,16 +161,6 @@ exportFunction(function() {
 
 // 以下のfunctionを対象ページに埋め込んで、即時実行させる。
 var execute_function = function($){
-  // 要素がremoveされたイベントを検知するため、jQueryのspecialEventの機能を使用
-  // see http://stackoverflow.com/questions/2200494/jquery-trigger-event-when-an-element-is-removed-from-the-dom
-  $.event.special.destroyed = {
-    remove: function (o) {
-      if (o.handler) {
-        o.handler();
-      }
-    }
-  };
-
   var GM_config = JSON.parse(gm_config());
   var deny_elem_selectors = [];
   for (prop in GM_config.fields) {
@@ -181,35 +171,59 @@ var execute_function = function($){
       deny_elem_selectors.push('div.' + prop);
     }
   }
+
   // 最後に読み込んだニコレポの一覧で、フィルターにヒットする記事を非表示にする。
-  function hide_denied_elements() {
+  function hide_denied_elements(timelineNode) {
     $.each(deny_elem_selectors, function (i, selector) {
-      $('div.nicorepo-page > div.timeline').last().find(selector).each(function (j, elem) {
+      $(timelineNode).find(selector).each(function (j, elem) {
         $(elem).hide();
-      }
-      );
+      });
     });
   }
   // 先頭に表示されている記事の上にある水平線を消す
-  function remove_head_line_from_first_elem() {
-    var first_elem = $('div.nicorepo-page > div.timeline').last().find(':visible');
+  function remove_head_line_from_first_elem(timelineNode) {
+    var first_elem = $(timelineNode).children(':visible');
     if (first_elem.length > 0) {
       first_elem.first().addClass('first');
     }
   }
-  // 「過去のニコレポを見る」リンク押下時にユーザースクリプトを再実行させる。
-  function add_event_to_next_page_link() {
-    $('div.next-page').not('.loading').on('destroyed', function () {
-      hide_denied_elements();
-      remove_head_line_from_first_elem();
-      add_event_to_next_page_link();
-    });
-  }
 
-  // 初回のページ表示時に1回だけ実行。以降は、「過去のニコレポを見る」リンク押下時に再実行させる。
-  hide_denied_elements();
-  remove_head_line_from_first_elem();
-  add_event_to_next_page_link();
+  // 初回のページ表示時に1回だけ実行。
+  hide_denied_elements($('#nicorepo > div.articleBody > div.nicorepo > div.nicorepo-page > div.timeline')[0]);
+  remove_head_line_from_first_elem($('#nicorepo > div.articleBody > div.nicorepo > div.nicorepo-page > div.timeline')[0]);
+
+  var mo = new MutationObserver(function(mrArray) {
+    for (var i = 0; i < mrArray.length; i++) {
+      var mr = mrArray[i];
+      if (mr.type != 'childList') {
+        continue;
+      }
+      if (mr.addedNodes.length < 1) {
+        // elements removed
+        continue;
+      }
+
+      var addedNode = mr.addedNodes[0];
+      if (addedNode.tagName !== 'DIV') {
+        continue;
+      }
+      var timelineNode;
+      if ($.inArray('nicorepo', addedNode.classList) >= 0) {
+        // loaded by Autopager
+        timelineNode = $(addedNode).find('div.nicorepo-page > div.timeline')[0];
+      } else if ($.inArray('nicorepo-page', addedNode.classList) >= 0) {
+        // clicked
+        timelineNode = $(addedNode).children('div.timeline')[0];
+      } else {
+        continue;
+      }
+
+      hide_denied_elements(timelineNode);
+      remove_head_line_from_first_elem(timelineNode);
+    }
+  });
+  mo.observe($('#nicorepo > div.articleBody')[0], {childList: true});
+  mo.observe($('#nicorepo > div.articleBody > div.nicorepo')[0], {childList: true});
 };
 var script = document.createElement('script');
 script.setAttribute("type", "application/javascript");
