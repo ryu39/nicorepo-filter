@@ -10,7 +10,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_registerMenuCommand
-// @version     1.0.5
+// @version     1.0.6
 // @downloadURL https://github.com/ryu39/nicorepo-filter/raw/master/nicorepo-filter.user.js
 // @updateURL   https://github.com/ryu39/nicorepo-filter/raw/master/nicorepo-filter.user.js
 // ==/UserScript==
