@@ -204,26 +204,24 @@ var execute_function = function($){
       }
 
       var addedNode = mr.addedNodes[0];
-      if (addedNode.tagName !== 'DIV') {
-        continue;
-      }
       var timelineNode;
-      if ($.inArray('nicorepo', addedNode.classList) >= 0) {
-        // loaded by Autopager
-        timelineNode = $(addedNode).find('div.nicorepo-page > div.timeline')[0];
-      } else if ($.inArray('nicorepo-page', addedNode.classList) >= 0) {
-        // clicked
+      if (addedNode.tagName === 'DIV' && $.inArray('nicorepo-page', addedNode.classList) >= 0) {
+          // clicked
         timelineNode = $(addedNode).children('div.timeline')[0];
+      } else if (addedNode.tagName === 'HR' && $.inArray('autopagerize_page_separator', addedNode.classList) >= 0) {
+        // loaded by Autopager
+        timelineNode = $('#nicorepo > div.articleBody > div.nicorepo > div.nicorepo-page > div.timeline')[0];
       } else {
         continue;
       }
 
       hide_denied_elements(timelineNode);
       remove_head_line_from_first_elem(timelineNode);
+      break;
     }
   });
-  mo.observe($('#nicorepo > div.articleBody')[0], {childList: true});
   mo.observe($('#nicorepo > div.articleBody > div.nicorepo')[0], {childList: true});
+  mo.observe($('#nicorepo > div.articleBody > div.nicorepo > div.nicorepo-page > div.timeline')[0], {childList: true});
 };
 var script = document.createElement('script');
 script.setAttribute("type", "application/javascript");
