@@ -163,7 +163,7 @@ exportFunction(function() {
 var execute_function = function($){
   var GM_config = JSON.parse(gm_config());
   var deny_elem_selectors = [];
-  for (prop in GM_config.fields) {
+  for (var prop in GM_config.fields) {
     if (!GM_config.fields.hasOwnProperty(prop)) {
       continue;
     }
