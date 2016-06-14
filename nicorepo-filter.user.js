@@ -208,7 +208,7 @@ var execute_function = function($){
       if (addedNode.tagName === 'DIV' && $.inArray('nicorepo-page', addedNode.classList) >= 0) {
           // clicked
         timelineNode = $(addedNode).children('div.timeline')[0];
-      } else if (addedNode.tagName === 'HR' && $.inArray('autopagerize_page_separator', addedNode.classList) >= 0) {
+      } else if (addedNode.tagName === 'DIV' && $.inArray('log', addedNode.classList) >= 0) {
         // loaded by Autopager
         timelineNode = $('#nicorepo > div.articleBody > div.nicorepo > div.nicorepo-page > div.timeline')[0];
       } else {
