@@ -129,7 +129,19 @@ GM_config.init(
     },
     'log-community-live-broadcast':
     {
-      'label': '生放送',
+      'label': '生放送開始',
+      'type': 'checkbox',
+      'default': true
+    },
+    'log-community-live-reserve':
+    {
+      'label': '生放送予約',
+      'type': 'checkbox',
+      'default': true
+    },
+    'log-community-register-chblog':
+    {
+      'label': 'ブロマガ投稿',
       'type': 'checkbox',
       'default': true
     },
